@@ -1,14 +1,14 @@
 package com.example.FirstProject.Controller;
 
 import com.example.FirstProject.bean.Student;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RequestMapping("/students")
 @RestController
 public class StudentController
 {
@@ -19,6 +19,7 @@ public class StudentController
         Student s = new Student(1,"Virat","Kohli");
         return s;
     }
+
     //http:localhost:8080/Students
     @GetMapping("Students")
     public List<Student> getStudents()
@@ -59,4 +60,48 @@ public class StudentController
     {
         return new Student(id,firstName,"Gayle");
     }
+
+    //Spring BOOT RESTAPI that hamdles HTTP Post Request-creating new resource
+
+    @PostMapping("/created")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Student createStudent(@RequestBody Student s)
+    {
+        System.out.println(s.getID());
+        System.out.println(s.getFirstname());
+        System.out.println(s.getSecondname());
+        return s;
+    }
+
+    //Spring Boot RESTAPI that handles PUT request -updating existing resource
+    @PutMapping("/{id}/update")
+    public Student updateStudent(@RequestBody Student s, @PathVariable("id") int Studentid)
+    {
+        System.out.println(s.getFirstname());
+        System.out.println(s.getSecondname());
+        return s;
+    }
+
+    //Spring Boot RESTAPI that handles Delete request
+    @DeleteMapping("/{id}/delete")
+    public String deleteStudent(@PathVariable("id") int Studentid)
+    {
+        System.out.println(Studentid);
+        return "Student deleted sucessfully";
+    }
+
+    //ResponseEntity class to http response.
+    // Header and Body
+
+    @GetMapping("/responseentity")
+    public ResponseEntity<Student>  getStudentsre()
+    {
+        Student s = new Student(1,"Virat","Kohli");
+        return ResponseEntity.ok()
+                .header("Custum-header","suresh")
+                .body(s);
+    }
+
 }
+
+
